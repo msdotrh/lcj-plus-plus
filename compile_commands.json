@@ -1,0 +1,11 @@
+[
+{
+  "directory": "/home/dongfengpo/lcj++/lcj-plus-plus",
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++23", "-isystem", "/home/dongfengpo/.xmake/packages/c/cli11/v2.7.2/2eb82670c6e04ecab0b61dcc98dcb510/include", "-DNDEBUG", "-o", "build/.objs/lcj++/linux/x86_64/release/src/cli.cpp.o", "src/cli.cpp"],
+  "file": "src/cli.cpp"
+},
+{
+  "directory": "/home/dongfengpo/lcj++/lcj-plus-plus",
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++23", "-isystem", "/home/dongfengpo/.xmake/packages/c/cli11/v2.7.2/2eb82670c6e04ecab0b61dcc98dcb510/include", "-DNDEBUG", "-o", "build/.objs/lcj++/linux/x86_64/release/src/main.cpp.o", "src/main.cpp"],
+  "file": "src/main.cpp"
+}]
