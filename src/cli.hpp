@@ -40,7 +40,7 @@ struct Run {
 
 struct Edit {
   std::string name;
-  std::filesystem::path file, directory;
+  std::optional<std::filesystem::path> file, directory;
   std::optional<std::filesystem::path> input, output;
   std::optional<std::size_t> memory_limit;
   std::optional<std::chrono::milliseconds> time_limit;
