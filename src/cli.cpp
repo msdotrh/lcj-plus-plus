@@ -1,5 +1,7 @@
 #include "cli.hpp"
 #include "CLI/CLI.hpp"
+#include "file_handling/testcase.hpp"
+#include "file_handling/toml.hpp"
 #include "globals.hpp"
 #include <chrono>
 #include <cstddef>
@@ -11,7 +13,10 @@
 using Commands = std::variant<Command::Add, Command::Remove, Command::Reset,
                               Command::Run, Command::Edit, Command::List>;
 
-void Command::Add::execute() {}
+void Command::Add::execute() {
+  const TestCase ts = {name,   file,       directory,   input,
+                       output, time_limit, memory_limit};
+}
 
 void Command::Remove::execute() {}
 

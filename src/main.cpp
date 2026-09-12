@@ -1,14 +1,10 @@
 #include "cli.hpp"
-#include "file_handling/testcase.hpp"
 #include "file_handling/toml.hpp"
 #include "globals.hpp"
 #include "utils.hpp"
 #include <CLI/CLI.hpp>
-#include <chrono>
 #include <filesystem>
-#include <iostream>
 #include <memory>
-#include <optional>
 #include <print>
 
 int main(int argc, char **argv) {
@@ -20,12 +16,7 @@ int main(int argc, char **argv) {
     utils::create_file(g_toml_path);
   }
 
-  // parse toml
-  auto toml_ptr = std::make_unique<TomlHandler>(g_toml_path);
+  auto toml = std::make_unique<TomlHandler>(g_toml_path);
 
-  toml_ptr->Add(TestCase{"name", "file", "path", std::nullopt, std::nullopt,
-                         std::nullopt, std::nullopt});
-
-  // end of program, write to toml.
-  toml_ptr->Write();
+  CLI_init();
 }
