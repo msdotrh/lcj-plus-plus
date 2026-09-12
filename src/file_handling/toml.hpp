@@ -1,5 +1,6 @@
 #ifndef TOML_H
 #define TOML_H
+#include <string_view>
 #pragma once
 
 #include "testcase.hpp"
@@ -15,7 +16,7 @@ struct TomlHandler {
   toml::array *GetArray();
 
   void Add(const TestCase &ts);
-  void Remove(const TestCase &ts);
+  void Remove(std::string_view);
   void Reset();
   void Edit(const TestCase &ts);
   void Write();

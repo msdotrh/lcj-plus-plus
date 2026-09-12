@@ -1,10 +1,13 @@
 #include "toml.hpp"
 #include "../globals.hpp"
+#include "../utils.hpp"
 #include "testcase.hpp"
 #include <cstdint>
+#include <cstdio>
 #include <exception>
 #include <fstream>
 #include <print>
+#include <string_view>
 #include <toml++/impl/table.hpp>
 
 toml::array *TomlHandler::GetArray() {
@@ -20,6 +23,12 @@ toml::array *TomlHandler::GetArray() {
 
 void TomlHandler::Add(const TestCase &ts) {
   auto array = GetArray();
+
+  if (utils::find(ts.name, *array) != array->end()) {
+    std::println(stderr, "{} already exists! Consider using edit, or remove.",
+                 ts.name);
+    std::terminate();
+  }
 
   toml::table table{
       {"name", ts.name},
@@ -44,9 +53,19 @@ void TomlHandler::Add(const TestCase &ts) {
 
 void TomlHandler::Edit(const TestCase &ts) {}
 
-void TomlHandler::Remove(const TestCase &ts) {}
+void TomlHandler::Remove(std::string_view name) {
+  auto array = GetArray();
+  auto it = utils::find(name, *array);
 
-void TomlHandler::Reset() {}
+  if (it == array->end()) {
+    std::println(stderr, "Can not find testcase with the name: {}", name);
+    std::terminate();
+  }
+
+  array->erase(it);
+}
+
+void TomlHandler::Reset() { utils::create_file(g_toml_path); }
 
 void TomlHandler::Write() {
   std::ofstream file(g_toml_path);
