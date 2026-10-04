@@ -1,5 +1,6 @@
 #ifndef CLI_H
 #define CLI_H
+#include "file_handling/toml.hpp"
 #pragma once
 
 #include <chrono>
@@ -15,18 +16,18 @@ struct Add {
   std::optional<std::size_t> memory_limit;
   std::optional<std::chrono::milliseconds> time_limit;
 
-  void execute();
+  void execute(TomlHandler &toml);
 };
 
 struct Remove {
   std::string name;
 
-  void execute();
+  void execute(TomlHandler &toml);
 };
 
 struct Reset {
 
-  void execute();
+  void execute(TomlHandler &toml);
 };
 
 struct Run {
@@ -35,7 +36,7 @@ struct Run {
   std::optional<std::size_t> memory_limit;
   std::optional<std::chrono::milliseconds> time_limit;
 
-  void execute();
+  void execute(TomlHandler &toml);
 };
 
 struct Edit {
@@ -45,15 +46,14 @@ struct Edit {
   std::optional<std::size_t> memory_limit;
   std::optional<std::chrono::milliseconds> time_limit;
 
-  void execute();
+  void execute(TomlHandler &toml);
 };
 
 struct List {
-  void execute();
+  void execute(TomlHandler &toml);
 };
-};
+}; // namespace Command
 
-
-void CLI_init();
+void CLI_init(TomlHandler &toml);
 
 #endif

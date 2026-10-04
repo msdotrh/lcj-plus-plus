@@ -1,6 +1,7 @@
 #ifndef TESTCASE_H
 #define TESTCASE_H
 #pragma once
+
 #include <chrono>
 #include <cstddef>
 #include <filesystem>

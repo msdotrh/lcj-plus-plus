@@ -1,6 +1,5 @@
 #include "globals.hpp"
 #include <filesystem>
-#include <optional>
 
 int g_argc = 0;
 char **g_argv = nullptr;

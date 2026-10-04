@@ -111,7 +111,6 @@ void TomlHandler::Write() {
                  g_toml_path.string());
     std::terminate();
   }
-  std::println("Writing the toml table to {}", g_toml_path.string());
   file << tbl << '\n';
 }
 
