@@ -51,7 +51,41 @@ void TomlHandler::Add(const TestCase &ts) {
   array->push_back(std::move(table));
 }
 
-void TomlHandler::Edit(const TestCase &ts) {}
+void TomlHandler::Edit(TestCaseOptional &tso) {
+  auto array = GetArray();
+  auto it = TomlHandler::Find(tso.name, *array);
+
+  if (it == array->end()) {
+    std::println(stderr,
+                 "Testcase with the name {} do not exist!, consider using add",
+                 tso.name);
+    std::terminate();
+  }
+
+  auto tbl = it->as_table();
+  if (tso.file) {
+    tbl->insert_or_assign("file",
+                          std::filesystem::absolute(*tso.file).string());
+  }
+  if (tso.dir) {
+    tbl->insert_or_assign("io-dir",
+                          std::filesystem::absolute(*tso.dir).string());
+  }
+  if (tso.input_file) {
+    tbl->insert_or_assign("input-file",
+                          std::filesystem::absolute(*tso.input_file).string());
+  }
+  if (tso.output_file) {
+    tbl->insert_or_assign("output-file",
+                          std::filesystem::absolute(*tso.output_file).string());
+  }
+  if (tso.time_limit) {
+    tbl->insert_or_assign("time-limit", (*tso.time_limit).count());
+  }
+  if (tso.memory) {
+    tbl->insert_or_assign("memory-limit", static_cast<int64_t>(*tso.memory));
+  }
+}
 
 void TomlHandler::Remove(std::string_view name) {
   auto array = GetArray();
@@ -65,7 +99,10 @@ void TomlHandler::Remove(std::string_view name) {
   array->erase(it);
 }
 
-void TomlHandler::Reset() { utils::create_file(g_toml_path); }
+void TomlHandler::Reset() {
+  utils::create_file(g_toml_path);
+  tbl.clear();
+}
 
 void TomlHandler::Write() {
   std::ofstream file(g_toml_path);
