@@ -4,7 +4,6 @@
 #include "utils.hpp"
 #include <CLI/CLI.hpp>
 #include <filesystem>
-#include <memory>
 #include <print>
 
 int main(int argc, char **argv) {
@@ -16,7 +15,9 @@ int main(int argc, char **argv) {
     utils::create_file(g_toml_path);
   }
 
-  auto toml = std::make_unique<TomlHandler>(g_toml_path);
+  auto toml = TomlHandler{g_toml_path};
 
-  CLI_init();
+  CLI_init(toml);
+
+  toml.Write();
 }
