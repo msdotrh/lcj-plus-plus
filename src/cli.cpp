@@ -3,32 +3,48 @@
 #include "file_handling/testcase.hpp"
 #include "file_handling/toml.hpp"
 #include "globals.hpp"
+#include "utils.hpp"
 #include <chrono>
 #include <cstddef>
+#include <exception>
 #include <filesystem>
 #include <optional>
+#include <ostream>
 #include <print>
 #include <variant>
 
 using Commands = std::variant<Command::Add, Command::Remove, Command::Reset,
                               Command::Run, Command::Edit, Command::List>;
 
-void Command::Add::execute() {
+void Command::Add::execute(TomlHandler &toml) {
   const TestCase ts = {name,   file,       directory,   input,
                        output, time_limit, memory_limit};
+  if (utils::is_ascii(ts.name)) {
+    toml.Add(ts);
+  } else {
+    std::println(stderr, "name is not valid, please only use ASCII character!");
+    std::terminate();
+  }
 }
 
-void Command::Remove::execute() {}
+void Command::Remove::execute(TomlHandler &toml) { toml.Remove(name); }
 
-void Command::Reset::execute() {}
+void Command::Reset::execute(TomlHandler &toml) { toml.Reset(); }
 
-void Command::Run::execute() {}
+void Command::Run::execute(TomlHandler &toml) {
+  // not yet implemented
+}
 
-void Command::Edit::execute() {}
+void Command::Edit::execute(TomlHandler &toml) {
+  TestCaseOptional tso = {name,   file,         directory, input,
+                          output, memory_limit, time_limit};
 
-void Command::List::execute() {}
+  toml.Edit(tso);
+}
 
-void CLI_init() {
+void Command::List::execute(TomlHandler &toml) {}
+
+void CLI_init(TomlHandler &toml) {
   std::string name;
   std::optional<std::filesystem::path> _file, _dir;
   std::optional<std::filesystem::path> _input_file, _output_file;
@@ -53,7 +69,7 @@ void CLI_init() {
                     "Input stream to read (default: stdin)");
     add->add_option("--output", _output_file,
                     "Output stream to read (default: stdout)");
-    add->add_option("--time_limit", _time_limit_in_milliseconds,
+    add->add_option("--time-limit", _time_limit_in_milliseconds,
                     "Set time limit for each case to process (ms)");
     add->add_option("--memory-limit", _memory_limit,
                     "Set memory limit for each case to process (MB)");
@@ -100,9 +116,9 @@ void CLI_init() {
 
   CLI::App *list =
       app.add_subcommand("list", "List current testcase inside testcases.toml");
-
   try {
     app.parse(g_argc, g_argv);
+
   } catch (const CLI::ParseError &e) {
     app.exit(e);
     return;
@@ -137,8 +153,11 @@ void CLI_init() {
                         _time_limit_in_milliseconds};
   } else {
     std::println("Nothing matched!");
+    if (g_argc == 1) {
+      std::cout << app.help() << std::flush;
+    }
     return;
   }
 
-  std::visit([](auto &cmd_p) { cmd_p.execute(); }, cmd);
+  std::visit([&toml](auto &cmd_p) { cmd_p.execute(toml); }, cmd);
 }
