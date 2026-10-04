@@ -1,13 +1,10 @@
 #ifndef UTILS_H
 #define UTILS_H
-#include <memory>
 #pragma once
 
-#include "file_handling/testcase.hpp"
 #include <algorithm>
 #include <filesystem>
 #include <string>
-#include <string_view>
 #include <toml++/toml.hpp>
 
 namespace utils {
@@ -17,9 +14,6 @@ inline bool is_ascii(const std::string &s) {
 }
 
 void create_file(const std::filesystem::path &path);
-
-toml::const_array_iterator find(std::string_view name,
-                                const toml::array &array);
 
 }; // namespace utils
 

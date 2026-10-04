@@ -1,10 +1,10 @@
 #ifndef TOML_H
 #define TOML_H
-#include <string_view>
 #pragma once
 
 #include "testcase.hpp"
 #include <filesystem>
+#include <memory>
 #include <toml++/toml.hpp>
 
 struct TomlHandler {
@@ -18,8 +18,10 @@ struct TomlHandler {
   void Add(const TestCase &ts);
   void Remove(std::string_view);
   void Reset();
-  void Edit(const TestCase &ts);
+  void Edit(TestCaseOptional &tso);
   void Write();
+  toml::array_iterator Find(std::string_view name, toml::array &array);
+  std::unique_ptr<TestCase> get(toml::array_iterator it);
 };
 
 #endif
