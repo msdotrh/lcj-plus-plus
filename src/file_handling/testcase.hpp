@@ -17,4 +17,11 @@ struct TestCase {
   void check_name();
 };
 
+struct TestCaseOptional {
+  std::string name;
+  std::optional<std::filesystem::path> file, dir, input_file, output_file;
+  std::optional<std::size_t> memory;
+  std::optional<std::chrono::milliseconds> time_limit;
+};
+
 #endif
