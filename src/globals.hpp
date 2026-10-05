@@ -1,7 +1,8 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
-#include <filesystem>
 #pragma once
+
+#include <filesystem>
 
 // Args global
 extern int g_argc;

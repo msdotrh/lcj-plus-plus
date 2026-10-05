@@ -2,11 +2,16 @@
 #include "../globals.hpp"
 #include "../utils.hpp"
 #include "testcase.hpp"
+#include <algorithm>
+#include <chrono>
+#include <cstddef>
 #include <cstdint>
 #include <exception>
 #include <filesystem>
 #include <fstream>
+#include <memory>
 #include <print>
+#include <string>
 #include <string_view>
 #include <toml++/impl/table.hpp>
 
@@ -117,7 +122,7 @@ void TomlHandler::Write() {
 toml::array_iterator TomlHandler::Find(std::string_view name,
                                        toml::array &array) {
   // Try to find a testcase named {name}, return a iterator to that TestCase in
-  // the arrray
+  // the array
   for (auto it = array.begin(); it != array.end(); it++) {
     const auto &node = *it;
 
@@ -142,4 +147,21 @@ toml::array_iterator TomlHandler::Find(std::string_view name,
   return array.end();
 }
 
-std::unique_ptr<TestCase> get(toml::array_iterator it) {}
+std::unique_ptr<TestCase> TomlHandler::get(toml::array_iterator &it) {
+  auto tbl = *it->as_table();
+  std::string name{tbl["name"].as_string()->value_or("0")};
+  std::filesystem::path io_dir{tbl["io-dir"].as_string()->value_or("0")};
+  std::filesystem::path file{tbl["file"].as_string()->value_or("0")};
+  std::filesystem::path input_file{
+      tbl["input-file"].as_string()->value_or("0")};
+  std::filesystem::path output_file{
+      tbl["output-file"].as_string()->value_or("0")};
+  std::chrono::milliseconds time_limit{
+      tbl["time-limit"].as_integer()->value_or(0)};
+  std::size_t memory_limit{
+      (size_t)tbl["memory-limit"].as_integer()->value_or(0)};
+
+  std::unique_ptr<TestCase> TestCasePointer =
+      std::make_unique<TestCase>(TestCase{name, file, io_dir});
+  return TestCasePointer;
+}

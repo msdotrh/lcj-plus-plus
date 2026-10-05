@@ -1,5 +1,3 @@
-#ifndef TOML_H
-#define TOML_H
 #pragma once
 
 #include "testcase.hpp"
@@ -11,7 +9,7 @@ struct TomlHandler {
   toml::table tbl;
 
   TomlHandler(const std::filesystem::path &path)
-      : tbl(toml::parse_file(path.string())) {}
+      : tbl(toml::parse_file(path.c_str())) {}
 
   toml::array *GetArray();
 
@@ -21,7 +19,5 @@ struct TomlHandler {
   void Edit(TestCaseOptional &tso);
   void Write();
   toml::array_iterator Find(std::string_view name, toml::array &array);
-  std::unique_ptr<TestCase> get(toml::array_iterator it);
+  std::unique_ptr<TestCase> get(toml::array_iterator &it);
 };
-
-#endif

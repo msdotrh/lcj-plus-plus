@@ -8,6 +8,7 @@
 #include <cstddef>
 #include <exception>
 #include <filesystem>
+#include <iostream>
 #include <optional>
 #include <ostream>
 #include <print>
@@ -42,7 +43,9 @@ void Command::Edit::execute(TomlHandler &toml) {
   toml.Edit(tso);
 }
 
-void Command::List::execute(TomlHandler &toml) {}
+void Command::List::execute(TomlHandler &toml) {
+  std::cout << toml.tbl << std::endl;
+}
 
 void CLI_init(TomlHandler &toml) {
   std::string name;
