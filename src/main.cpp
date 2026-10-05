@@ -1,6 +1,7 @@
 #include "cli.hpp"
 #include "file_handling/toml.hpp"
 #include "globals.hpp"
+#include "sandbox/process.hpp"
 #include "utils.hpp"
 #include <CLI/CLI.hpp>
 #include <filesystem>
@@ -16,6 +17,8 @@ int main(int argc, char **argv) {
   }
 
   auto toml = TomlHandler{g_toml_path};
+  Process pr{};
+  pr.Run();
 
   CLI_init(toml);
 

@@ -2,10 +2,10 @@
 #include "../globals.hpp"
 #include "../utils.hpp"
 #include "testcase.hpp"
-#include <algorithm>
 #include <chrono>
 #include <cstddef>
 #include <cstdint>
+#include <ctime>
 #include <exception>
 #include <filesystem>
 #include <fstream>
@@ -161,7 +161,8 @@ std::unique_ptr<TestCase> TomlHandler::get(toml::array_iterator &it) {
   std::size_t memory_limit{
       (size_t)tbl["memory-limit"].as_integer()->value_or(0)};
 
-  std::unique_ptr<TestCase> TestCasePointer =
-      std::make_unique<TestCase>(TestCase{name, file, io_dir});
+  std::unique_ptr<TestCase> TestCasePointer = std::make_unique<TestCase>(
+      TestCase{name, file, io_dir, input_file, output_file, time_limit,
+               memory_limit});
   return TestCasePointer;
 }

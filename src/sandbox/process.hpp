@@ -8,12 +8,15 @@ struct ioPair {
   std::filesystem::path input, output;
 };
 
+struct ProcessOutput {
+  std::string standard_out, standard_err;
+};
+
 struct Process {
   std::string command;
-  std::string output;
+  ProcessOutput output;
   std::vector<std::string> args;
   std::vector<ioPair> ioPairs;
 
-  int status_code;
-  void Run();
+  int Run();
 };
